@@ -5,6 +5,7 @@ export const usePokeStore = defineStore('pokestore', () => {
   const pokedata = ref([]);
   const searchInput = ref('');
   const fetchedPokemonData = ref([]);
+  const currentSinglePokemonData = ref([])
 
   const isFetching = ref(false);
 
@@ -56,6 +57,17 @@ export const usePokeStore = defineStore('pokestore', () => {
     fetchedPokemonData.value = [...objectSet].map(JSON.parse);
   }
 
+  async function fetchSinglePokemon(id) {
+    currentSinglePokemonData.value = []
+    const response = await fetch('https://pokeapi.co/api/v2/pokemon/' + id);
+    const data = await response.json();
+    return currentSinglePokemonData.value = [data]
+  }
 
-  return { pokedata, fetchData, searchPokemon, searchInput, setSearchInput, retrievedPokeData, checkIfIsFetching };
+  const retrieveSinglePokemon = computed(() => {
+    return currentSinglePokemonData.value
+  })
+
+
+  return { pokedata, fetchData, searchPokemon, searchInput, setSearchInput, retrievedPokeData, checkIfIsFetching, fetchSinglePokemon, retrieveSinglePokemon };
 });
